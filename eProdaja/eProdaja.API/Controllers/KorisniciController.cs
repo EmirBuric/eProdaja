@@ -8,25 +8,25 @@ namespace eProdaja.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProizvodiController : ControllerBase
+    public class KorisniciController : ControllerBase
     {
-        private IProizvodiService _service;
-        public ProizvodiController(IProizvodiService service) 
+        private IKorisniciService _service;
+        public KorisniciController(IKorisniciService service) 
         {
             _service = service;
         }
         [HttpGet]
-        public List<Proizvodi> GetList() 
+        public List<Korisnici> GetList() 
         {
             return _service.GetList();  
         }
         [HttpPost]
-        public Proizvodi Insert(ProizvodiInsertRequest request) 
-        {
+        public Korisnici Insert(KorisniciInsertRequest request)
+        { 
             return _service.Insert(request);
         }
-        [HttpPut]
-        public Proizvodi Update(int id,ProizvodiUpdateRequest request) 
+        [HttpPut("{id}")]
+        public Korisnici Update(int id,KorisniciUpdateRequest request) 
         {
             return _service.Update(id,request);
         }

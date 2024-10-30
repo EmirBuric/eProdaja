@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace eProdaja.Modeli
+namespace eProdaja.Modeli.Requests
 {
-    public class Proizvodi
+    public class ProizvodiInsertRequest
     {
-        public int ProizvodId { get; set; }
-
         public string Naziv { get; set; } = null!;
 
         public string Sifra { get; set; } = null!;
@@ -17,10 +15,6 @@ namespace eProdaja.Modeli
         public int VrstaId { get; set; }
 
         public int JedinicaMjereId { get; set; }
-
-        public byte[]? Slika { get; set; }
-
-        public byte[]? SlikaThumb { get; set; }
 
         public bool Status { get; set; }
     }

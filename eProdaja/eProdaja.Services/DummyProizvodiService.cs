@@ -1,4 +1,5 @@
 ﻿using eProdaja.Modeli;
+using eProdaja.Modeli.Requests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace eProdaja.Services
 {
-    public class DummyProizvodiService : ProizvodiService
+    public class DummyProizvodiService : IProizvodiService
     {
         public new List<Proizvodi> List = new List<Proizvodi>()
         {
@@ -18,9 +19,19 @@ namespace eProdaja.Services
                 Cijena=999
             }
         };
-        public override List<Proizvodi> GetList()
+        public List<Proizvodi> GetList()
         {
             return List;
+        }
+
+        public Proizvodi Insert(ProizvodiInsertRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Proizvodi Update(int id, ProizvodiUpdateRequest request)
+        {
+            throw new NotImplementedException();
         }
     }
 }

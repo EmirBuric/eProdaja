@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace eProdaja.Services
 {
-    public interface IProizvodiService
+    public interface IKorisniciService
     {
-        List<Proizvodi> GetList();
-        Proizvodi Insert(ProizvodiInsertRequest request);
-        Proizvodi Update(int id,ProizvodiUpdateRequest request);
+        List<Korisnici> GetList();
+        Korisnici Insert(KorisniciInsertRequest request);
+        Korisnici Update(int id,KorisniciUpdateRequest request);
     }
 }
