@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eProdaja.Modeli.Requests
 {
-    public class ProizvodiInsertRequest
+    public class ProizvodiInsertRequest:BaseInsertRequest
     {
         public string Naziv { get; set; } = null!;
 

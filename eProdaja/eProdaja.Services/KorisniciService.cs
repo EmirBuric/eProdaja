@@ -1,44 +1,59 @@
 ﻿using eProdaja.Modeli;
 using eProdaja.Modeli.Requests;
+using eProdaja.Modeli.SearchObject;
 using eProdaja.Services.Database;
 using MapsterMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 
 namespace eProdaja.Services
 {
-    public class KorisniciService : IKorisniciService
+    public class KorisniciService : BaseService<Modeli.Korisnici, KorisniciSearchObject, Database.Korisnici,KorisniciInsertRequest,KorisniciUpdateRequest>,IKorisniciService
     {
-        public EProdajaContext Context { get; set; }
-        public IMapper Mapper { get; set; }
         public KorisniciService(EProdajaContext context,IMapper mapper) 
-        {
-            Context = context;
-            Mapper = mapper;
-        }
-        
-        public virtual List<Modeli.Korisnici> GetList()
-        {
-            var list= Context.Korisnicis.ToList();
-            List<Modeli.Korisnici> result = new List<Modeli.Korisnici>();
-            /*list.ForEach(x =>result.Add(new Modeli.Korisnici() { 
-                KorisnikId = x.KorisnikId,
-                KorisnickoIme = x.KorisnickoIme,
-                Email = x.Email,
-                Ime = x.Ime,
-                Prezime = x.Prezime,
-                Telefon = x.Telefon,
-                Status = x.Status
-            }));*/
-            result = Mapper.Map(list,result);
-            return result;
-        }
+        :base(context,mapper){}
 
-        public Modeli.Korisnici Insert(KorisniciInsertRequest request)
+        public override IQueryable<Database.Korisnici> AddFilter(KorisniciSearchObject search, IQueryable<Database.Korisnici> query)
+        {
+            var filterdQuerry=base.AddFilter(search, query);
+            if (!string.IsNullOrWhiteSpace(search?.ImeGTE))
+            {
+                filterdQuerry = filterdQuerry.Where(x => x.Ime.StartsWith(search.ImeGTE));
+            }
+            if (!string.IsNullOrWhiteSpace(search?.PrezimeGTE))
+            {
+                filterdQuerry = filterdQuerry.Where(x => x.Prezime.StartsWith(search.PrezimeGTE));
+            }
+            if (!string.IsNullOrWhiteSpace(search?.Email))
+            {
+                filterdQuerry = filterdQuerry.Where(x => x.Email == search.Email);
+            }
+            if (!string.IsNullOrWhiteSpace(search?.KorisnickoIme))
+            {
+                filterdQuerry = filterdQuerry.Where(x => x.KorisnickoIme == search.KorisnickoIme);
+            }
+            if (search.IsKorisniciUlogeIncluded == true)
+            {
+                filterdQuerry = filterdQuerry.Include(x => x.KorisniciUloges).ThenInclude(x => x.Uloga);
+            }
+            if (!string.IsNullOrEmpty(search?.OrderBy))
+            {
+                filterdQuerry = filterdQuerry.OrderBy(search.OrderBy);
+            }
+            if (search?.Page.HasValue == true && search?.PageSize.HasValue == true)
+            {
+                filterdQuerry = filterdQuerry.Skip(search.Page.Value * search.PageSize.Value).Take(search.PageSize.Value);
+            }
+            return filterdQuerry;
+        }
+        public override Modeli.Korisnici Insert(KorisniciInsertRequest request)
         {
             if (request.Lozinka != request.LozinkaPotvrda) 
             {
@@ -75,7 +90,7 @@ namespace eProdaja.Services
             return Convert.ToBase64String(inArray);
         }
 
-        public Modeli.Korisnici Update(int id, KorisniciUpdateRequest request)
+        public override Modeli.Korisnici Update(int id, KorisniciUpdateRequest request)
         {
            var entity = Context.Korisnicis.Find(id);
            Mapper.Map(request, entity);

@@ -9,8 +9,8 @@ namespace eProdaja.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class KorisniciController : BaseController<Korisnici,KorisniciSearchObject,KorisniciInsertRequest,KorisniciUpdateRequest>
+    public class VrsteProizvodaController : BaseController<VrsteProizvodum,VrsteProizvodaSearchObject,BaseInsertRequest,BaseUpdateRequest>
     {
-        public KorisniciController(IKorisniciService service) :base(service) {}
+        public VrsteProizvodaController(IVrsteProizvodaService service) :base(service) {}        
     }
 }

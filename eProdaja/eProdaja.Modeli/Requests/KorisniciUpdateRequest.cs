@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eProdaja.Modeli.Requests
 {
-    public class KorisniciUpdateRequest
+    public class KorisniciUpdateRequest:BaseUpdateRequest
     {
         public string Ime { get; set; } = null!;
 

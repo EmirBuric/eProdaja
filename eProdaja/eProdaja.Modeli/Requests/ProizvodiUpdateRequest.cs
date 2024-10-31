@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eProdaja.Modeli.Requests
 {
-    public class ProizvodiUpdateRequest
+    public class ProizvodiUpdateRequest:BaseUpdateRequest
     {
         public string Naziv { get; set; } = null!;
 

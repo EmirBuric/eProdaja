@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddTransient<IKorisniciService, KorisniciService>();
 builder.Services.AddTransient<IProizvodiService, ProizvodiService>();
+builder.Services.AddTransient<IVrsteProizvodaService, VrsteProizvodaService>();
 //builder.Services.AddTransient<ProizvodiService, DummyProizvodiService>();
 
 builder.Services.AddControllers();
