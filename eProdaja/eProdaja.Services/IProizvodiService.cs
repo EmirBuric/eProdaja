@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace eProdaja.Services
 {
-    public interface IProizvodiService:IService<Proizvodi,ProizvodiSearchObject,ProizvodiInsertRequest,ProizvodiUpdateRequest>
+    public interface IProizvodiService:ICRUDService<Proizvodi, ProizvodiSearchObject,ProizvodiInsertRequest,ProizvodiUpdateRequest>
     {
-
+        public Proizvodi Activate(int id);
     }
 }

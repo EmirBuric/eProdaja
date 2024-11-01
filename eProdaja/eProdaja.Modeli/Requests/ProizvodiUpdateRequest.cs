@@ -8,8 +8,6 @@ namespace eProdaja.Modeli.Requests
     {
         public string Naziv { get; set; } = null!;
 
-        public string Sifra { get; set; } = null!;
-
         public decimal Cijena { get; set; }
 
         public int VrstaId { get; set; }

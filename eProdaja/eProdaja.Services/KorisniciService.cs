@@ -12,10 +12,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Dynamic;
 using System.Linq.Dynamic.Core;
+using Azure.Core;
 
 namespace eProdaja.Services
 {
-    public class KorisniciService : BaseService<Modeli.Korisnici, KorisniciSearchObject, Database.Korisnici,KorisniciInsertRequest,KorisniciUpdateRequest>,IKorisniciService
+    public class KorisniciService : BaseCRUDServis<Modeli.Korisnici, KorisniciSearchObject, Database.Korisnici,KorisniciInsertRequest,KorisniciUpdateRequest>,IKorisniciService
     {
         public KorisniciService(EProdajaContext context,IMapper mapper) 
         :base(context,mapper){}
@@ -53,23 +54,16 @@ namespace eProdaja.Services
             }
             return filterdQuerry;
         }
-        public override Modeli.Korisnici Insert(KorisniciInsertRequest request)
+     
+        public override void BeforeInsert(KorisniciInsertRequest insert, Database.Korisnici entity)
         {
-            if (request.Lozinka != request.LozinkaPotvrda) 
+            if (insert.Lozinka != insert.LozinkaPotvrda)
             {
                 throw new Exception("Lozinka i LozinkaPotvrda moraju biti iste");
             }
-
-            Database.Korisnici entity= new Database.Korisnici();
-            Mapper.Map(request, entity);
-
             entity.LozinkaSalt = GenerateSalt();
-            entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, request.Lozinka);
-
-            Context.Add(entity);
-            Context.SaveChanges();
-
-            return Mapper.Map<Modeli.Korisnici>(entity);
+            entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, insert.Lozinka);
+            base.BeforeInsert(insert, entity);
         }
         public static string GenerateSalt()
         {
@@ -90,24 +84,18 @@ namespace eProdaja.Services
             return Convert.ToBase64String(inArray);
         }
 
-        public override Modeli.Korisnici Update(int id, KorisniciUpdateRequest request)
+        public override void BeforeUpdate(KorisniciUpdateRequest update, Database.Korisnici entity)
         {
-           var entity = Context.Korisnicis.Find(id);
-           Mapper.Map(request, entity);
-
-            if (request.Lozinka != null) 
+            if (update.Lozinka != null)
             {
-                if (request.Lozinka != request.LozinkaPotvrda)
+                if (update.Lozinka != update.LozinkaPotvrda)
                 {
                     throw new Exception("Lozinka i LozinkaPotvrda moraju biti iste");
                 }
                 entity.LozinkaSalt = GenerateSalt();
-                entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, request.Lozinka);
+                entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, update.Lozinka);
             }
-
-            Context.SaveChanges();
-
-            return Mapper.Map<Modeli.Korisnici>(entity);
+            base.BeforeUpdate(update, entity);
         }
     }
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace eProdaja.Services
 {
-    public interface IKorisniciService:IService<Korisnici,KorisniciSearchObject,KorisniciInsertRequest,KorisniciUpdateRequest>
+    public interface IKorisniciService:ICRUDService<Korisnici, KorisniciSearchObject,KorisniciInsertRequest,KorisniciUpdateRequest>
     {
     }
 }

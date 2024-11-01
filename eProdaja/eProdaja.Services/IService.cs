@@ -9,14 +9,12 @@ using System.Threading.Tasks;
 
 namespace eProdaja.Services
 {
-    public interface IService<TModel,TSearch,TInsert,TUpdate> 
+    public interface IService<TModel,TSearch> 
         where TSearch:BaseSearchObject 
-        where TInsert:BaseInsertRequest
-        where TUpdate:BaseUpdateRequest
+        
     {
         public PagedResults<TModel> GetPaged(TSearch search);
         public TModel GetById(int id);
-        public TModel  Insert(TInsert insert);
-        public TModel Update(int id,TUpdate update);
+      
     }
 }

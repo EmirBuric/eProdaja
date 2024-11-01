@@ -9,13 +9,12 @@ namespace eProdaja.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BaseController<TModel,TSearch,TInsert,TUpdate>:ControllerBase 
+    public class BaseController<TModel,TSearch>:ControllerBase 
         where TSearch:BaseSearchObject
-        where TInsert : BaseInsertRequest
-        where TUpdate : BaseUpdateRequest
+
     {
-        protected IService<TModel,TSearch,TInsert,TUpdate> _service;
-        public BaseController(IService<TModel, TSearch,TInsert,TUpdate> service)
+        protected IService<TModel,TSearch> _service;
+        public BaseController(IService<TModel, TSearch> service)
         {
             _service = service;
         }
@@ -29,15 +28,6 @@ namespace eProdaja.API.Controllers
         {
             return _service.GetById(id);
         }
-        [HttpPost]
-        public TModel Insert(TInsert insert)
-        {
-            return _service.Insert(insert);
-        }
-        [HttpPut("{id}")]
-        public TModel Update(int id,TUpdate update) 
-        {
-            return _service.Update(id,update);
-        }
+        
     }
 }

@@ -9,9 +9,17 @@ namespace eProdaja.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProizvodiController : BaseController<Proizvodi,ProizvodiSearchObject,ProizvodiInsertRequest,ProizvodiUpdateRequest>
+    public class ProizvodiController : BaseCRUDController<Proizvodi,ProizvodiSearchObject,ProizvodiInsertRequest,ProizvodiUpdateRequest>
     {
+        protected new IProizvodiService _service;
         public ProizvodiController(IProizvodiService service) : base(service)
-        {}
+        {
+            _service = service;
+        }
+        [HttpPut("{id}/activate")]
+        public Proizvodi Activate(int id)
+        {
+            return _service.Activate(id);  
+        }
     }
 }

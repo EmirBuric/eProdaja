@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace eProdaja.Services
 {
-    public interface IVrsteProizvodaService : IService<Modeli.VrsteProizvodum, VrsteProizvodaSearchObject,BaseInsertRequest,BaseUpdateRequest>
+    public interface IVrsteProizvodaService : ICRUDService<Modeli.VrsteProizvodum, VrsteProizvodaSearchObject,VrsteProivodumUpsertRequest,VrsteProivodumUpsertRequest>
     {
 
     }

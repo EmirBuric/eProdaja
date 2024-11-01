@@ -1,5 +1,6 @@
 using eProdaja.Services;
 using eProdaja.Services.Database;
+using eProdaja.Services.ProizvodiStateMachine;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,9 @@ builder.Services.AddTransient<IProizvodiService, ProizvodiService>();
 builder.Services.AddTransient<IVrsteProizvodaService, VrsteProizvodaService>();
 //builder.Services.AddTransient<ProizvodiService, DummyProizvodiService>();
 
+builder.Services.AddTransient<BaseProizvodiState>();
+builder.Services.AddTransient<InitialProizvodiState>();
+builder.Services.AddTransient<DraftProizvodiState>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

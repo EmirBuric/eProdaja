@@ -12,12 +12,10 @@ using System.Threading.Tasks;
 
 namespace eProdaja.Services
 {
-    public class BaseService<TModel,TSearch,TDbEntity,TInsert,TUpdate>:IService<TModel, TSearch,TInsert,TUpdate> 
+    public abstract class BaseService<TModel,TSearch,TDbEntity>:IService<TModel, TSearch> 
         where TSearch:BaseSearchObject 
         where TDbEntity:class, new() 
         where TModel : class
-        where TInsert:BaseInsertRequest
-        where TUpdate :BaseUpdateRequest
     {
         public EProdajaContext Context { get; set; }
         public IMapper Mapper { get; set; }
@@ -67,31 +65,6 @@ namespace eProdaja.Services
             
         }
 
-        public virtual TModel Insert(TInsert insert)
-        {
-            TDbEntity entity = new TDbEntity();
-
-            Mapper.Map(insert, entity);
-
-            Context.Add(entity);
-            Context.SaveChanges();
-
-            return Mapper.Map<TModel>(entity);
-        }
-
-        public virtual TModel Update(int id, TUpdate update)
-        {
-            var entity = Context.Set<TDbEntity>().Find(id);
-            if (entity != null)
-            {
-                Mapper.Map(update, entity);
-                Context.SaveChanges();
-                return Mapper.Map<TModel>(entity);
-            }
-            else
-            {
-                return null;
-            }
-        }
+        
     }
 }

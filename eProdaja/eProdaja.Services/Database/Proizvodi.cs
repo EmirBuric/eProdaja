@@ -22,6 +22,7 @@ public partial class Proizvodi
     public byte[]? SlikaThumb { get; set; }
 
     public bool Status { get; set; }
+    public string? StateMachine { get; set; }
 
     public virtual ICollection<IzlazStavke> IzlazStavkes { get; set; } = new List<IzlazStavke>();
 
