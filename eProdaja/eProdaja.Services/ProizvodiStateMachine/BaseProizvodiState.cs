@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using eProdaja.Modeli;
 
 namespace eProdaja.Services.ProizvodiStateMachine
 {
@@ -24,19 +25,27 @@ namespace eProdaja.Services.ProizvodiStateMachine
         }
         public virtual Modeli.Proizvodi Insert(ProizvodiInsertRequest request)
         {
-            throw new Exception("Method not allowed");
+            throw new UserException("Method not allowed");
         }
         public virtual Modeli.Proizvodi Update(int id,ProizvodiUpdateRequest request)
         {
-            throw new Exception("Method not allowed");
+            throw new UserException("Method not allowed");
         }
         public virtual Modeli.Proizvodi Activate(int id)
         {
-            throw new Exception("Method not allowed");
+            throw new UserException("Method not allowed");
         }
         public virtual Modeli.Proizvodi Hide(int id)
         {
-            throw new Exception("Method not allowed");
+            throw new UserException("Method not allowed");
+        }
+        public virtual Modeli.Proizvodi Edit(int id)
+        {
+            throw new UserException("Method not allowed");
+        }
+        public virtual List<string> AllowedActions(Database.Proizvodi entity) 
+        {
+            throw new UserException("Method not allowed");
         }
         public BaseProizvodiState CreateState(string stateName) 
         {
@@ -46,6 +55,10 @@ namespace eProdaja.Services.ProizvodiStateMachine
                     return ServiceProvider.GetService<InitialProizvodiState>();
                 case "draft":
                     return ServiceProvider.GetService<DraftProizvodiState>();
+                case "active":
+                    return ServiceProvider.GetService<ActiveProizvodiState>();
+                case "hidden":
+                    return ServiceProvider.GetService<HiddenProizvodiState>();
                 default:
                     throw new Exception("State not recognized");
             }

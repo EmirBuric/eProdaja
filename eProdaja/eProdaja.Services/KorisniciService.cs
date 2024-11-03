@@ -13,13 +13,18 @@ using System.Threading.Tasks;
 using System.Linq.Dynamic;
 using System.Linq.Dynamic.Core;
 using Azure.Core;
+using Microsoft.Extensions.Logging;
 
 namespace eProdaja.Services
 {
     public class KorisniciService : BaseCRUDServis<Modeli.Korisnici, KorisniciSearchObject, Database.Korisnici,KorisniciInsertRequest,KorisniciUpdateRequest>,IKorisniciService
     {
-        public KorisniciService(EProdajaContext context,IMapper mapper) 
-        :base(context,mapper){}
+        ILogger<KorisniciService> _logger;
+        public KorisniciService(EProdajaContext context,IMapper mapper,ILogger<KorisniciService> logger) 
+        :base(context,mapper)
+        {
+            _logger = logger;
+        }
 
         public override IQueryable<Database.Korisnici> AddFilter(KorisniciSearchObject search, IQueryable<Database.Korisnici> query)
         {
@@ -57,6 +62,7 @@ namespace eProdaja.Services
      
         public override void BeforeInsert(KorisniciInsertRequest insert, Database.Korisnici entity)
         {
+            _logger.LogInformation($"Adding user: {entity.KorisnickoIme}");
             if (insert.Lozinka != insert.LozinkaPotvrda)
             {
                 throw new Exception("Lozinka i LozinkaPotvrda moraju biti iste");
@@ -96,6 +102,23 @@ namespace eProdaja.Services
                 entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, update.Lozinka);
             }
             base.BeforeUpdate(update, entity);
+        }
+
+        public Modeli.Korisnici Login(string username, string password)
+        {
+            var entity = Context.Korisnicis.FirstOrDefault(x => x.KorisnickoIme == username);
+
+            if (entity == null)
+            {
+                return null;
+            }
+
+            var hash = GenerateHash(entity.LozinkaSalt, password);
+            if(hash!=entity.LozinkaHash)
+            {
+                return null;
+            }
+            return Mapper.Map<Modeli.Korisnici>(entity);
         }
     }
 }

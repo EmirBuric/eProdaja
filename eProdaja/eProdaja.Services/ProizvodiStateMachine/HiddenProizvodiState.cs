@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace eProdaja.Services.ProizvodiStateMachine
 {
-    public class ActiveProizvodiState : BaseProizvodiState
+    public class HiddenProizvodiState : BaseProizvodiState
     {
-        public ActiveProizvodiState(EProdajaContext context, IMapper mapper, IServiceProvider serviceProvider) : base(context, mapper, serviceProvider)
+        public HiddenProizvodiState(EProdajaContext context, IMapper mapper, IServiceProvider serviceProvider) : base(context, mapper, serviceProvider)
         {
         }
-        public override Modeli.Proizvodi Hide(int id)
+        public override Modeli.Proizvodi Edit(int id)
         {
             var set = Context.Set<Database.Proizvodi>();
             var entity = set.Find(id);
-            entity.StateMachine = "hidden";
+            entity.StateMachine = "draft";
             Context.SaveChanges();
             return Mapper.Map<Modeli.Proizvodi>(entity);
         }
@@ -25,7 +25,7 @@ namespace eProdaja.Services.ProizvodiStateMachine
         {
             return new List<string>()
             {
-                nameof(Hide)
+                nameof(Edit) 
             };
         }
     }

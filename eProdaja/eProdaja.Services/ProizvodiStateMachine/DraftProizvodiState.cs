@@ -32,5 +32,22 @@ namespace eProdaja.Services.ProizvodiStateMachine
             Context.SaveChanges();
             return Mapper.Map<Modeli.Proizvodi>(entity);
         }
+        public override Modeli.Proizvodi Hide(int id)
+        {
+            var set = Context.Set<Database.Proizvodi>();
+            var entity = set.Find(id);
+            entity.StateMachine = "hidden";
+            Context.SaveChanges();
+            return Mapper.Map<Modeli.Proizvodi>(entity);
+        }
+        public override List<string> AllowedActions(Database.Proizvodi entity)
+        {
+            return new List<string>()
+            {
+                nameof(Update),
+                nameof(Activate),
+                nameof(Hide)
+            };
+        }
     }
 }
