@@ -43,6 +43,11 @@ namespace eProdaja.API
                     new Claim(ClaimTypes.Name, user.Ime),
                     new Claim(ClaimTypes.NameIdentifier, user.KorisnickoIme)
                 };
+                foreach (var role in user.KorisniciUloges)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role.Uloga.Naziv));
+                }
+
 
                 var identity = new ClaimsIdentity(claims, Scheme.Name);
 

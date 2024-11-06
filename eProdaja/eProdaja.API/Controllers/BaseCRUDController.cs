@@ -16,12 +16,12 @@ namespace eProdaja.API.Controllers
         }
 
         [HttpPost]
-        public TModel Insert(TInsert insert)
+        public virtual TModel Insert(TInsert insert)
         {
             return _service.Insert(insert);
         }
         [HttpPut("{id}")]
-        public TModel Update(int id, TUpdate update)
+        public virtual TModel Update(int id, TUpdate update)
         {
             return _service.Update(id, update);
         }

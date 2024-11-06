@@ -1,4 +1,6 @@
 ﻿using Azure.Core;
+using EasyNetQ;
+using eProdaja.Modeli.Messages;
 using eProdaja.Modeli.Requests;
 using eProdaja.Services.Database;
 using MapsterMapper;
@@ -30,7 +32,13 @@ namespace eProdaja.Services.ProizvodiStateMachine
             var entity = set.Find(id);
             entity.StateMachine = "active";
             Context.SaveChanges();
-            return Mapper.Map<Modeli.Proizvodi>(entity);
+            var bus = RabbitHutch.CreateBus("host=localhost");
+
+            var mappedEntity = Mapper.Map<Modeli.Proizvodi>(entity);
+            ProizvodiActivated message = new ProizvodiActivated { Proizvod = mappedEntity };
+            bus.PubSub.Publish(message);
+
+            return mappedEntity;
         }
         public override Modeli.Proizvodi Hide(int id)
         {
