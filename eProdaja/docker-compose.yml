@@ -1,4 +1,4 @@
-version: '3'
+
 services:
 #mssql docker
   eprodaja-sql:
@@ -20,7 +20,7 @@ services:
     build:
       context: .
     environment:
-      - ConnectionStrings:eProdajaConnection=Server=eprodaja-sql,1433;Database=eProdajaVjezbe2024;User=sa;Password=QWElkj132!;ConnectRetryCount=0; TrustServerCertificate=True
+      - ConnectionStrings:db1=Server=eprodaja-sql,1433;Database=eProdajaVjezbe2024;User=sa;Password=QWElkj132!;ConnectRetryCount=0; TrustServerCertificate=True
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - 5208:5208

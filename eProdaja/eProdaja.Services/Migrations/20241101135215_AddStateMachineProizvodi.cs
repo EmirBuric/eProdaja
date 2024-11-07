@@ -11,19 +11,19 @@ namespace eProdaja.Services.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-           name: "StateMachine",
-           table: "Proizvodi",
-           type: "nvarchar(max)", 
-           nullable: true);
+           // migrationBuilder.AddColumn<string>(
+           //name: "StateMachine",
+           //table: "Proizvodi",
+           //type: "nvarchar(max)", 
+           //nullable: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-            name: "StateMachine",
-            table: "Proizvodi");
+            //migrationBuilder.DropColumn(
+            //name: "StateMachine",
+            //table: "Proizvodi");
         }
     }
 }
