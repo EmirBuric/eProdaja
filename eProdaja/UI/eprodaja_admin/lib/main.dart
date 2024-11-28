@@ -1,7 +1,13 @@
+import 'package:eprodaja_admin/providers/auth_provider.dart';
+import 'package:eprodaja_admin/providers/product_provider.dart';
+import 'package:eprodaja_admin/screens/product_list_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => ProductProvider())],
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -28,20 +34,24 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Colors.blue, primary: Colors.red),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home: LoginPage(),
     );
   }
 }
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  LoginPage({super.key});
+
+  TextEditingController _usernameController = new TextEditingController();
+  TextEditingController _passwordController = new TextEditingController();
+  late ProductProvider _productProvider;
 
   @override
   Widget build(BuildContext context) {
+    _productProvider = context.read<ProductProvider>();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Login"),
@@ -53,28 +63,57 @@ class LoginPage extends StatelessWidget {
           child: Card(
             child: Column(
               children: [
-                Image.network(
+                /*Image.network(
                   "https://www.fit.ba/content/763cbb87-718d-4eca-a991-343858daf424",
                   height: 100,
                   width: 100,
+                ),*/
+                Image.asset(
+                  "assets/images/logo.png",
+                  height: 100,
+                  width: 100,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 10,
                 ),
-                const TextField(
+                TextField(
                   decoration: InputDecoration(
                       labelText: "Username", prefixIcon: Icon(Icons.email)),
+                  controller: _usernameController,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 10,
                 ),
-                const TextField(
+                TextField(
                   decoration: InputDecoration(
                       labelText: "Password", prefixIcon: Icon(Icons.password)),
+                  controller: _passwordController,
                 ),
                 ElevatedButton(
-                    onPressed: () {
-                      print("Login attempt");
+                    onPressed: () async {
+                      var username = _usernameController.text;
+                      var password = _passwordController.text;
+                      print("Login attempt $username $password");
+                      AuthProvider.username = _usernameController.text;
+                      AuthProvider.password = _passwordController.text;
+
+                      try {
+                        var data = await _productProvider.get();
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ProductListScreen()));
+                      } on Exception catch (e) {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                                  title: Text("Error"),
+                                  content: Text(e.toString()),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: Text("Ok"))
+                                  ],
+                                ));
+                      }
                     },
                     child: const Text("Login"))
               ],
@@ -82,42 +121,6 @@ class LoginPage extends StatelessWidget {
           ),
         )),
       ),
-    );
-  }
-}
-
-class LayoutExamples extends StatelessWidget {
-  const LayoutExamples({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-            height: 200,
-            color: Colors.red,
-            child: Center(
-              child: Container(
-                height: 100,
-                width: 50,
-                color: Colors.blue,
-                child: const Text("Sample text"),
-              ),
-            )),
-        const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text("1"),
-            Text("2"),
-            Text("3"),
-          ],
-        ),
-        Container(
-          height: 150,
-          color: Colors.red,
-          child: const Center(child: Text("Contain")),
-        )
-      ],
     );
   }
 }
