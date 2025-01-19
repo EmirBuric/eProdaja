@@ -18,6 +18,10 @@ namespace eProdaja.Modeli
 
         public int JedinicaMjereId { get; set; }
 
+        public byte[]? Slika { get; set; }
+
+        public byte[]? SlikaThumb { get; set; }
+
         public bool Status { get; set; }
         public string? StateMachine { get; set; }
     }

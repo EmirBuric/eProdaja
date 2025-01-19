@@ -1,7 +1,11 @@
 import 'package:eprodaja_admin/layouts/master_screen.dart';
+import 'package:eprodaja_admin/models/proizvod.dart';
+import 'package:eprodaja_admin/models/search_result.dart';
 import 'package:eprodaja_admin/providers/product_provider.dart';
-import 'package:eprodaja_admin/screens/product_details_screen.dart';
+import 'package:eprodaja_admin/providers/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class ProductListScreen extends StatefulWidget {
@@ -12,19 +16,21 @@ class ProductListScreen extends StatefulWidget {
 }
 
 class _ProductListScreenState extends State<ProductListScreen> {
-  late ProductProvider _productProvider;
+  late ProductProvider provider;
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    _productProvider = context.read<ProductProvider>();
+
+    provider = context.read<ProductProvider>();
   }
+
+  SearchResult<Proizvod>? data = null;
 
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-        title_widget: Text("Prodict list"),
+        title_widget: Text("Lista proizvoda"),
         child: Container(
             child: Column(children: [
           const Text("Test"),
@@ -34,10 +40,95 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 //Navigator.of(context).pop();
                 /*Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const ProductDetailScreen()));*/
-                var data = await _productProvider.get();
-                print("data: ${data['resultsList'][0]['naziv']}");
+                data = await provider.get();
+                //print(data[0].naziv);
               },
-              child: const Text("Login"))
+              child: const Text("Login")),
+          _buildSearch(),
+          _buildResultView()
         ])));
+  }
+
+  TextEditingController _ftsEditingController = new TextEditingController();
+  TextEditingController _sifraEditingController = new TextEditingController();
+  Widget _buildSearch() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Expanded(
+              child: TextField(
+                  controller: _ftsEditingController,
+                  decoration: InputDecoration(labelText: "Naziv ili sifra"))),
+          SizedBox(
+            width: 8,
+          ),
+          Expanded(
+              child: TextField(
+                  controller: _sifraEditingController,
+                  decoration: InputDecoration(labelText: "Sifra"))),
+          ElevatedButton(
+              onPressed: () async {
+                var filter = {
+                  "fts": _ftsEditingController.text,
+                  "sifra": _sifraEditingController.text
+                };
+                data = await provider.get(filter: filter);
+                setState(() {});
+                //print(data[0].proizvodId);
+              },
+              child: Text("Pretraga")),
+          SizedBox(
+            width: 8,
+          ),
+          ElevatedButton(onPressed: () async {}, child: Text("Dodaj")),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildResultView() {
+    return Expanded(
+        child: SingleChildScrollView(
+      child: DataTable(
+        columns: [
+          DataColumn(label: Text("ID"), numeric: true),
+          DataColumn(label: Text("Naziv")),
+          DataColumn(label: Text("Šifra")),
+          DataColumn(label: Text("Cijena")),
+          DataColumn(label: Text("Slika")),
+        ],
+        /*rows: [
+          DataRow(cells: [
+            DataCell(Container(child: Text("1"), width: 150)),
+            DataCell(Container(child: Text("Laptop"), width: double.infinity))
+          ]),
+          DataRow(cells: [
+            DataCell(Container(
+              child: Text("2"),
+              width: 150,
+            )),
+            DataCell(Container(child: Text("Monitor"), width: double.infinity))
+          ])
+        ],*/
+        rows: data?.result
+                .map((e) => DataRow(cells: [
+                      DataCell(Text(e.proizvodId.toString())),
+                      DataCell(Text(e.naziv ?? "")),
+                      DataCell(Text(e.sifra ?? "")),
+                      DataCell(Text(formatNumber(e.cijena))),
+                      DataCell(e.slika != null
+                          ? Container(
+                              width: 100,
+                              height: 100,
+                              child: imageFromString(e.slika!),
+                            )
+                          : Text("")),
+                    ]))
+                .toList()
+                .cast<DataRow>() ??
+            [],
+      ),
+    ));
   }
 }

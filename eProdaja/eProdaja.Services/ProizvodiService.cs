@@ -32,6 +32,11 @@ namespace eProdaja.Services
             {
                 filterdQuery = filterdQuery.Where(x => x.Naziv.Contains(search.FTS));
             }
+            if (!string.IsNullOrWhiteSpace(search?.Sifra))
+            {
+                filterdQuery = filterdQuery.Where(x => x.Sifra==search.Sifra);
+            }
+
             return filterdQuery;
         }
         public override Modeli.Proizvodi Insert(ProizvodiInsertRequest insert)

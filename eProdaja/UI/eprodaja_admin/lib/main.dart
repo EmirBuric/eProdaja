@@ -1,13 +1,16 @@
 import 'package:eprodaja_admin/providers/auth_provider.dart';
+import 'package:eprodaja_admin/providers/logged_product_provider.dart';
 import 'package:eprodaja_admin/providers/product_provider.dart';
 import 'package:eprodaja_admin/screens/product_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => ProductProvider())],
-      child: const MyApp()));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<ProductProvider>(
+        create: (_) => LoggedProductProvider())
+  ], child: const MyApp()));
+  //runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -51,7 +54,6 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _productProvider = context.read<ProductProvider>();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Login"),
@@ -91,14 +93,15 @@ class LoginPage extends StatelessWidget {
                 ),
                 ElevatedButton(
                     onPressed: () async {
-                      var username = _usernameController.text;
+                      ProductProvider provider = new ProductProvider();
+                      /*var username = _usernameController.text;
                       var password = _passwordController.text;
-                      print("Login attempt $username $password");
+                      print("Login attempt $username $password");*/
                       AuthProvider.username = _usernameController.text;
                       AuthProvider.password = _passwordController.text;
 
                       try {
-                        var data = await _productProvider.get();
+                        var data = await provider.get();
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => ProductListScreen()));
                       } on Exception catch (e) {
