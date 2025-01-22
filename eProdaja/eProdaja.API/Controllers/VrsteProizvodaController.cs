@@ -11,6 +11,7 @@ namespace eProdaja.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class VrsteProizvodaController : BaseCRUDController<VrsteProizvodum, VrsteProizvodaSearchObject, VrsteProivodumUpsertRequest, VrsteProivodumUpsertRequest>
     {
         public VrsteProizvodaController(IVrsteProizvodaService service) :base(service) {}

@@ -14,6 +14,8 @@ namespace eProdaja.Modeli.Requests
 
         public int JedinicaMjereId { get; set; }
 
-        public bool Status { get; set; }
+        public byte[]? Slika { get; set; }
+
+        //public bool Status { get; set; }
     }
 }

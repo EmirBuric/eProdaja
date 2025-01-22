@@ -1,6 +1,9 @@
+import 'package:eprodaja_admin/models/vrste_proizvoda.dart';
 import 'package:eprodaja_admin/providers/auth_provider.dart';
+import 'package:eprodaja_admin/providers/jedinice_mjere_provider.dart';
 import 'package:eprodaja_admin/providers/logged_product_provider.dart';
 import 'package:eprodaja_admin/providers/product_provider.dart';
+import 'package:eprodaja_admin/providers/vrste_proizvoda_provider.dart';
 import 'package:eprodaja_admin/screens/product_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +11,11 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<ProductProvider>(
-        create: (_) => LoggedProductProvider())
+        create: (_) => LoggedProductProvider()),
+    ChangeNotifierProvider<JediniceMjereProvider>(
+        create: (_) => JediniceMjereProvider()),
+    ChangeNotifierProvider<VrsteProizvodaProvider>(
+        create: (_) => VrsteProizvodaProvider())
   ], child: const MyApp()));
   //runApp(const MyApp());
 }

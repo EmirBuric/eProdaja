@@ -14,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddTransient<IKorisniciService, KorisniciService>();
 builder.Services.AddTransient<IProizvodiService, ProizvodiService>();
 builder.Services.AddTransient<IVrsteProizvodaService, VrsteProizvodaService>();
+builder.Services.AddTransient<IJediniceMjereService, JediniceMjereService>();
 //builder.Services.AddTransient<ProizvodiService, DummyProizvodiService>();
 
 builder.Services.AddTransient<BaseProizvodiState>();

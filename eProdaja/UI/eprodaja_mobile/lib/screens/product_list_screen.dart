@@ -1,12 +1,10 @@
-import 'package:eprodaja_admin/layouts/master_screen.dart';
-import 'package:eprodaja_admin/models/proizvod.dart';
-import 'package:eprodaja_admin/models/search_result.dart';
-import 'package:eprodaja_admin/providers/product_provider.dart';
-import 'package:eprodaja_admin/providers/utils.dart';
-import 'package:eprodaja_admin/screens/product_details_screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:eprodaja_mobile/layouts/master_screen.dart';
+import 'package:eprodaja_mobile/models/proizvod.dart';
+import 'package:eprodaja_mobile/models/search_result.dart';
+import 'package:eprodaja_mobile/providers/product_provider.dart';
+import 'package:eprodaja_mobile/providers/utils.dart';
+import 'package:eprodaja_mobile/screens/product_details_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class ProductListScreen extends StatefulWidget {
@@ -26,12 +24,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
     provider = context.read<ProductProvider>();
   }
 
-  SearchResult<Proizvod>? data = null;
+  SearchResult<Proizvod>? data;
 
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-        title_widget: Text("Lista proizvoda"),
+        title_widget: const Text("Lista proizvoda"),
         child: Container(
             child: Column(children: [
           const Text("Test"),
@@ -50,8 +48,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
         ])));
   }
 
-  TextEditingController _ftsEditingController = new TextEditingController();
-  TextEditingController _sifraEditingController = new TextEditingController();
+  final TextEditingController _ftsEditingController = TextEditingController();
+  final TextEditingController _sifraEditingController = TextEditingController();
   Widget _buildSearch() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -60,14 +58,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
           Expanded(
               child: TextField(
                   controller: _ftsEditingController,
-                  decoration: InputDecoration(labelText: "Naziv ili sifra"))),
-          SizedBox(
+                  decoration: const InputDecoration(labelText: "Naziv ili sifra"))),
+          const SizedBox(
             width: 8,
           ),
           Expanded(
               child: TextField(
                   controller: _sifraEditingController,
-                  decoration: InputDecoration(labelText: "Sifra"))),
+                  decoration: const InputDecoration(labelText: "Sifra"))),
           ElevatedButton(
               onPressed: () async {
                 var filter = {
@@ -78,8 +76,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 setState(() {});
                 //print(data[0].proizvodId);
               },
-              child: Text("Pretraga")),
-          SizedBox(
+              child: const Text("Pretraga")),
+          const SizedBox(
             width: 8,
           ),
           ElevatedButton(
@@ -87,7 +85,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ProductDetailScreen()));
               },
-              child: Text("Dodaj")),
+              child: const Text("Dodaj")),
         ],
       ),
     );
@@ -95,11 +93,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
 
   Widget _buildResultView() {
     return Expanded(
-        child: Container(
+        child: SizedBox(
             width: double.infinity,
             child: SingleChildScrollView(
               child: DataTable(
-                columns: [
+                columns: const [
                   DataColumn(label: Text("ID"), numeric: true),
                   DataColumn(label: Text("Naziv")),
                   DataColumn(label: Text("Šifra")),
@@ -137,12 +135,12 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                   DataCell(Text(e.sifra ?? "")),
                                   DataCell(Text(formatNumber(e.cijena))),
                                   DataCell(e.slika != null
-                                      ? Container(
+                                      ? SizedBox(
                                           width: 100,
                                           height: 100,
                                           child: imageFromString(e.slika!),
                                         )
-                                      : Text("")),
+                                      : const Text("")),
                                 ]))
                         .toList()
                         .cast<DataRow>() ??

@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:eprodaja_admin/layouts/master_screen.dart';
-import 'package:eprodaja_admin/models/jedinice_mjere.dart';
-import 'package:eprodaja_admin/models/proizvod.dart';
-import 'package:eprodaja_admin/models/search_result.dart';
-import 'package:eprodaja_admin/models/vrste_proizvoda.dart';
-import 'package:eprodaja_admin/providers/jedinice_mjere_provider.dart';
-import 'package:eprodaja_admin/providers/product_provider.dart';
-import 'package:eprodaja_admin/providers/vrste_proizvoda_provider.dart';
+import 'package:eprodaja_mobile/layouts/master_screen.dart';
+import 'package:eprodaja_mobile/models/jedinice_mjere.dart';
+import 'package:eprodaja_mobile/models/proizvod.dart';
+import 'package:eprodaja_mobile/models/search_result.dart';
+import 'package:eprodaja_mobile/models/vrste_proizvoda.dart';
+import 'package:eprodaja_mobile/providers/jedinice_mjere_provider.dart';
+import 'package:eprodaja_mobile/providers/product_provider.dart';
+import 'package:eprodaja_mobile/providers/vrste_proizvoda_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -29,8 +29,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   late ProductProvider productProvider;
   late JediniceMjereProvider jediniceMjereProvider;
   late VrsteProizvodaProvider vrsteProizvodaProvider;
-  SearchResult<VrsteProizvoda>? vrstaProizvodaResult = null;
-  SearchResult<JediniceMjere>? jediniceMjereResult = null;
+  SearchResult<VrsteProizvoda>? vrstaProizvodaResult;
+  SearchResult<JediniceMjere>? jediniceMjereResult;
   bool isLoading = true;
 
   @override
@@ -70,10 +70,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
+      title: "Product Details",
       child: Column(
         children: [isLoading ? Container() : _buildForm(), _saveRow()],
       ),
-      title: "Product Details",
     );
   }
 
@@ -89,13 +89,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               children: [
                 Expanded(
                     child: FormBuilderTextField(
-                  decoration: InputDecoration(labelText: "Šifra"),
+                  decoration: const InputDecoration(labelText: "Šifra"),
                   name: "sifra",
                 )),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                     child: FormBuilderTextField(
-                  decoration: InputDecoration(labelText: "Naziv"),
+                  decoration: const InputDecoration(labelText: "Naziv"),
                   name: "naziv",
                 ))
               ],
@@ -105,7 +105,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 Expanded(
                     child: FormBuilderDropdown(
                   name: "vrstaId",
-                  decoration: InputDecoration(labelText: "Vrsta Proizvoda"),
+                  decoration: const InputDecoration(labelText: "Vrsta Proizvoda"),
                   items: vrstaProizvodaResult?.result
                           .map((item) => DropdownMenuItem(
                               value: item.vrstaId.toString(),
@@ -113,11 +113,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           .toList() ??
                       [],
                 )),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                     child: FormBuilderDropdown(
                   name: "jedinicaMjereId",
-                  decoration: InputDecoration(labelText: "Jedinica Mjere"),
+                  decoration: const InputDecoration(labelText: "Jedinica Mjere"),
                   items: jediniceMjereResult?.result
                           .map((item) => DropdownMenuItem(
                               value: item.jedinicaMjereId.toString(),
@@ -125,10 +125,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           .toList() ??
                       [],
                 )),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                     child: FormBuilderTextField(
-                  decoration: InputDecoration(labelText: "Cijena"),
+                  decoration: const InputDecoration(labelText: "Cijena"),
                   name: "cijena",
                 ))
               ],
@@ -141,11 +141,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         builder: (field) {
                           return InputDecorator(
                               decoration:
-                                  InputDecoration(labelText: "Odaberite sliku"),
+                                  const InputDecoration(labelText: "Odaberite sliku"),
                               child: ListTile(
-                                leading: Icon(Icons.photo),
-                                title: Text("Select image"),
-                                trailing: Icon(Icons.file_upload),
+                                leading: const Icon(Icons.photo),
+                                title: const Text("Select image"),
+                                trailing: const Icon(Icons.file_upload),
                                 onTap: getImage,
                               ));
                         }))
@@ -167,7 +167,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               onPressed: () {
                 _formKey.currentState?.saveAndValidate();
                 debugPrint(_formKey.currentState?.value.toString());
-                var request = new Map.from(_formKey.currentState!.value);
+                var request = Map.from(_formKey.currentState!.value);
 
                 request["slika"] = _base64image;
                 if (widget.product == null) {
@@ -176,7 +176,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   productProvider.update(widget.product!.proizvodId!, request);
                 }
               },
-              child: Text("Sacuvaj"))
+              child: const Text("Sacuvaj"))
         ],
       ),
     );

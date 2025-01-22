@@ -1,6 +1,6 @@
-import 'package:eprodaja_admin/screens/product_details_screen.dart';
-import 'package:eprodaja_admin/screens/product_list_screen.dart';
-import 'package:eprodaja_admin/screens/user_list_screen.dart';
+import 'package:eprodaja_mobile/screens/product_details_screen.dart';
+import 'package:eprodaja_mobile/screens/product_list_screen.dart';
+import 'package:eprodaja_mobile/screens/user_list_screen.dart';
 import 'package:flutter/material.dart';
 
 class MasterScreenWidget extends StatefulWidget {
@@ -22,31 +22,31 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
           child: ListView(
             children: [
               ListTile(
-                title: Text('Back'),
+                title: const Text('Back'),
                 onTap: () {
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },
               ),
               ListTile(
-                title: Text('Proizovdi'),
+                title: const Text('Proizovdi'),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const ProductListScreen()));
                 },
               ),
               ListTile(
-                title: Text('Detalji'),
+                title: const Text('Detalji'),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ProductDetailScreen()));
                 },
               ),
               ListTile(
-                title: Text("Korisnici"),
+                title: const Text("Korisnici"),
                 onTap: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => UserListScreen()));
+                      builder: (context) => const UserListScreen()));
                 },
               )
             ],
